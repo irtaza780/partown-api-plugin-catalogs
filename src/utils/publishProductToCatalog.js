@@ -17,10 +17,10 @@ export default async function publishProductToCatalog(product, context) {
   const { Catalog, Products } = collections;
 
   const startTime = Date.now();
-
   // Convert Product schema object to Catalog schema object
   const catalogProduct = await createCatalogProduct(product, context);
-
+  console.log("catalogProduct", catalogProduct)
+  // console.log("here is the catalog product", catalogProduct)
   // Check to see if product has variants
   // If not, do not publish the product to the Catalog
   if (!catalogProduct.variants || (catalogProduct.variants && catalogProduct.variants.length === 0)) {
@@ -32,7 +32,12 @@ export default async function publishProductToCatalog(product, context) {
     $set: {
       product: catalogProduct,
       shopId: catalogProduct.shopId,
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      propertyType: catalogProduct.propertyType ?? null,
+      propertyUnits: catalogProduct.area.value ?? 20.02,
+      propertyPrice: catalogProduct.area.price ?? 20.01,
+      location: catalogProduct.location ?? null,
+      propertySaleType: catalogProduct.propertySaleType ?? null
     },
     $setOnInsert: {
       _id: Random.id(),

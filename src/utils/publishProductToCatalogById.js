@@ -11,5 +11,6 @@ import publishProductToCatalog from "./publishProductToCatalog.js";
 export default async function publishProductToCatalogById(productId, context) {
   const { Products } = context.collections;
   const product = await Products.findOne({ _id: productId });
+  // console.log("this is the product", product)
   return publishProductToCatalog(product, context);
 }

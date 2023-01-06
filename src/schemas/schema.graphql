@@ -252,12 +252,38 @@ type CatalogProductVariant implements CatalogProductOrVariant & Node {
   width: Float
 }
 
+"location"
+type location {
+  country: String
+  state: String
+  location: String
+}
+
+"property sale type"
+type propertySaleType {
+  "property type"
+  type: String
+}
+
 """
 Catalog items are combined to create a catalog. Each item can represent a different type of content.
 """
 interface CatalogItem {
   "Item ID"
   _id: ID!
+
+  "property units"
+  propertyUnits: Float
+
+  "property price"
+  propertyPrice: Float
+
+  "property type land or house"
+  propertyType: String
+  
+  propertySaleType: propertySaleType
+
+  location: location
 
   "Date and time at which the item was created"
   createdAt: DateTime
@@ -273,6 +299,19 @@ interface CatalogItem {
 type CatalogItemProduct implements CatalogItem & Node {
   "The CatalogItemProduct ID"
   _id: ID!
+
+  "property units"
+  propertyUnits: Float
+
+  "property price"
+  propertyPrice: Float
+
+  "property type land or house"
+  propertyType: String
+  
+  propertySaleType: propertySaleType
+
+  location: location
 
   "The date and time at which this CatalogItem was first created, which is when the related product was first published"
   createdAt: DateTime!
@@ -291,6 +330,19 @@ type CatalogItemProduct implements CatalogItem & Node {
 type CatalogItemContent implements CatalogItem & Node {
   "The CatalogItemProduct ID"
   _id: ID!
+
+  "property units"
+  propertyUnits: Float
+
+  "property price"
+  propertyPrice: Float
+
+  "property type land or house"
+  propertyType: String
+  
+  propertySaleType: propertySaleType
+
+  location: location
 
   "The date and time at which this CatalogItem was first created"
   createdAt: DateTime!
@@ -341,6 +393,19 @@ type Catalog implements Node {
   "The Catalog ID"
   _id: ID!
 
+  "property units"
+  propertyUnits: Float
+
+  "property price"
+  propertyPrice: Float
+
+  "property type land or house"
+  propertyType: String
+  
+  propertySaleType: propertySaleType
+
+  location: location
+
   "The date and time at which this Catalog was first created"
   createdAt: DateTime!
 
@@ -355,6 +420,12 @@ type Catalog implements Node {
 enum CatalogItemSortByField {
   "Sort by item ID"
   _id
+
+  "sort by property units"
+  propertyUnits
+
+  "sort by property price"
+  propertyPrice
 
   "Sort by date and time at which the item was created"
   createdAt
@@ -408,11 +479,19 @@ type VendorConnection {
   totalCount: Int!
 }
 
+input propertyFiltersInput {
+  state: [String],
+  propertyType: String,
+  propertySaleType: String
+}
+
 extend type Query {
   "Gets items from a shop catalog"
   catalogItems(
     "Provide a list of shop IDs from which you want to get catalog items"
     shopIds: [ID]!
+
+    propertyFilters: propertyFiltersInput
 
     "Optionally provide a list of tag IDs to further filter the item list"
     tagIds: [ID],

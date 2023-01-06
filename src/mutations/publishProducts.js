@@ -42,6 +42,7 @@ export default async function publishProducts(context, productIds) {
   }
 
   const success = await publishProductsToCatalog(productIds, context);
+  // console.log("see the success", success)
   if (!success) {
     Logger.error("Some Products could not be published to the Catalog.");
     throw new ReactionError(

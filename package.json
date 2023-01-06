@@ -1,7 +1,7 @@
 {
-  "name": "@reactioncommerce/api-plugin-catalogs",
+  "name": "@partown/api-plugin-catalogs",
   "description": "Catalogs plugin for the Reaction API",
-  "version": "0.0.0-development",
+  "version": "1.0.0-development",
   "main": "index.js",
   "type": "module",
   "engines": {

@@ -534,6 +534,25 @@ export const CatalogProduct = new SimpleSchema({
  * @property {String} shopId required
  * @property {Date} updatedAt required
  */
+
+const location = new SimpleSchema({
+  country: {
+    type: String
+  },
+  state: {
+    type: String
+  },
+  location: {
+    type: String
+  }
+})
+
+const propertySaleType = new SimpleSchema({
+  type: {
+    type: String
+  }
+})
+
 export const Catalog = new SimpleSchema({
   _id: {
     type: String,
@@ -542,6 +561,17 @@ export const Catalog = new SimpleSchema({
   product: {
     type: CatalogProduct,
     optional: true
+  },
+  propertySaleType: propertySaleType,
+  location: location,
+  propertyType: {
+    type: String
+  },
+  propertyUnits: {
+    type: Number
+  },
+  propertyPrice: {
+    type: Number
   },
   createdAt: {
     type: Date,
