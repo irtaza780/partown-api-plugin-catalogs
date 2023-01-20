@@ -27,10 +27,14 @@ export default async function catalogItems(context, { searchQuery, shopIds, tagI
     "product.isVisible": true
   };
   if(propertyFilters){
+    console.log("if statement")
     const { state, propertyType, propertySaleType } = propertyFilters;
     if(state?.length) query['location.state'] = { $in: state };
     if(propertySaleType) query['propertySaleType.type']=propertySaleType;
     if(propertyType) query['propertyType'] = propertyType
+  } else if( !propertyFilters?.propertySaleType ) {
+    console.log("else statement")
+    query['propertySaleType.type'] = {$ne: "sold"}
   }
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
