@@ -30,8 +30,9 @@ export default async function catalogItems(context, { searchQuery, shopIds, tagI
     console.log("if statement")
     const { state, propertyType, propertySaleType } = propertyFilters;
     if(state?.length) query['location.state'] = { $in: state };
-    if(propertySaleType) query['propertySaleType.type']=propertySaleType;
     if(propertyType) query['propertyType'] = propertyType
+    if(propertySaleType) query['propertySaleType.type']=propertySaleType;
+    else query['propertySaleType.type'] = {$ne: "sold"}
   } else if( !propertyFilters?.propertySaleType ) {
     console.log("else statement")
     query['propertySaleType.type'] = {$ne: "sold"}
