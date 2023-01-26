@@ -19,7 +19,7 @@ export default async function publishProductToCatalog(product, context) {
   const startTime = Date.now();
   // Convert Product schema object to Catalog schema object
   const catalogProduct = await createCatalogProduct(product, context);
-  console.log("catalogProduct", catalogProduct)
+  // console.log("catalogProduct", catalogProduct)
   // console.log("here is the catalog product", catalogProduct)
   // Check to see if product has variants
   // If not, do not publish the product to the Catalog

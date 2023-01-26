@@ -14,6 +14,7 @@ import publishProductsToCatalog from "../utils/publishProductsToCatalog.js";
  */
 export default async function publishProducts(context, productIds) {
   const { collections } = context;
+  const{ user } = context;
   const { Catalog, Products } = collections;
 
   // Find all products
@@ -23,7 +24,7 @@ export default async function publishProducts(context, productIds) {
     },
     { _id: 1, shopId: 1 }
   ).toArray();
-
+  // console.log("Here is the products", products, user)
   if (products.length !== productIds.length) {
     throw new ReactionError("not-found", "Some products not found");
   }
@@ -32,12 +33,17 @@ export default async function publishProducts(context, productIds) {
   for (const shopId of uniqueShopIds) {
     // TODO(pod-auth): create helper to handle multiple permissions checks for multiple items
     for (const product of products) {
-      // eslint-disable-next-line no-await-in-loop
-      await context.validatePermissions(
-        `reaction:legacy:products:${product._id}`,
-        "publish",
-        { shopId }
-      );
+      console.log("product", product)
+      if(product?.currentOwner?.userId === user.id){
+        console.log("the user is owner", product)
+      } else {
+        // eslint-disable-next-line no-await-in-loop
+        await context.validatePermissions(
+          `reaction:legacy:products:${product._id}`,
+          "publish",
+          { shopId }
+        );
+      }
     }
   }
 
