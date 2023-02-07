@@ -13,6 +13,7 @@ import publishProductsToCatalog from "../utils/publishProductsToCatalog.js";
  * @returns {Promise<Object[]>} Array of CatalogItemProduct objects
  */
 export default async function publishProducts(context, productIds) {
+  console.log("that is the context", context)
   const { collections } = context;
   const{ user } = context;
   const { Catalog, Products } = collections;
@@ -34,7 +35,7 @@ export default async function publishProducts(context, productIds) {
     // TODO(pod-auth): create helper to handle multiple permissions checks for multiple items
     for (const product of products) {
       console.log("product", product)
-      if(product?.currentOwner?.userId === user.id){
+      if(product?.currentOwner?.userId === context?.userId){
         console.log("the user is owner", product)
       } else {
         // eslint-disable-next-line no-await-in-loop
