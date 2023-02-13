@@ -59,7 +59,8 @@ export default async function register(app) {
               name: "product_search_index"
             }
           ]
-        ]
+        ],
+        default_language: "none"
       }
     },
     functionsByType: {

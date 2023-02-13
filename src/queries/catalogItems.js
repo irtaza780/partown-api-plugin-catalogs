@@ -42,10 +42,17 @@ export default async function catalogItems(context, { searchQuery, shopIds, tagI
 
   
   if (searchQuery) {
-    query.$text = {
-      $search: _.escapeRegExp(searchQuery)
-    };
+    // query.$text = {
+    //   $search: searchQuery
+    // };
+    query["product.title"] = { 
+      $regex: searchQuery, 
+      $options: "i" 
+    }
+    // query.$text = {$regex: "^" + searchQuery + ".*$"}
   }
   console.log("here are property filters", propertyFilters, query)
+  // console.log(await Catalog.find({$text: {$regex: "^" + searchQuery + ".*$"}}).toArray()
+  // )
   return Catalog.find(query);
 }
