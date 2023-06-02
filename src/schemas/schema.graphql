@@ -280,7 +280,7 @@ interface CatalogItem {
 
   "property type land or house"
   propertyType: String
-  
+
   propertySaleType: propertySaleType
 
   location: location
@@ -308,7 +308,7 @@ type CatalogItemProduct implements CatalogItem & Node {
 
   "property type land or house"
   propertyType: String
-  
+
   propertySaleType: propertySaleType
 
   location: location
@@ -339,7 +339,7 @@ type CatalogItemContent implements CatalogItem & Node {
 
   "property type land or house"
   propertyType: String
-  
+
   propertySaleType: propertySaleType
 
   location: location
@@ -401,7 +401,7 @@ type Catalog implements Node {
 
   "property type land or house"
   propertyType: String
-  
+
   propertySaleType: propertySaleType
 
   location: location
@@ -480,8 +480,8 @@ type VendorConnection {
 }
 
 input propertyFiltersInput {
-  state: [String],
-  propertyType: String,
+  state: [String]
+  propertyType: String
   propertySaleType: String
 }
 
@@ -494,31 +494,31 @@ extend type Query {
     propertyFilters: propertyFiltersInput
 
     "Optionally provide a list of tag IDs to further filter the item list"
-    tagIds: [ID],
+    tagIds: [ID]
 
     "Additional filters to apply"
-    booleanFilters: [CatalogBooleanFilter],
+    booleanFilters: [CatalogBooleanFilter]
 
     "Optional text search query"
-    searchQuery: String,
+    searchQuery: String
 
     "Return only results that come after this cursor. Use this with `first` to specify the number of results to return."
-    after: ConnectionCursor,
+    after: ConnectionCursor
 
     "Return only results that come before this cursor. Use this with `last` to specify the number of results to return."
-    before: ConnectionCursor,
+    before: ConnectionCursor
 
     "Return at most this many results. This parameter may be used with either `after` or `offset` parameters."
-    first: ConnectionLimitInt,
+    first: ConnectionLimitInt
 
     "Return at most this many results. This parameter may be used with the `before` parameter."
-    last: ConnectionLimitInt,
+    last: ConnectionLimitInt
 
     "Return only results that come after the Nth result. This parameter may be used with the `first` parameter."
-    offset: Int,
+    offset: Int
 
     "Return results sorted in this order"
-    sortOrder: SortOrder = desc,
+    sortOrder: SortOrder = desc
 
     "Provide a Currency code if sortBy is minPrice"
     sortByPriceCurrencyCode: String
@@ -542,29 +542,31 @@ extend type Query {
   "Gets an array of all vendors"
   vendors(
     "Optionally provide a list of shop IDs from which you want to get the vendors"
-    shopIds: [ID],
+    shopIds: [ID]
 
     "Optionally provide a list of tag IDs to further filter the vendors"
-    tagIds: [ID],
+    tagIds: [ID]
 
     "Return only results that come after this cursor. Use this with `first` to specify the number of results to return."
-    after: ConnectionCursor,
+    after: ConnectionCursor
 
     "Return only results that come before this cursor. Use this with `last` to specify the number of results to return."
-    before: ConnectionCursor,
+    before: ConnectionCursor
 
     "Return at most this many results. This parameter may be used with either `after` or `offset` parameters."
-    first: ConnectionLimitInt,
+    first: ConnectionLimitInt
 
     "Return at most this many results. This parameter may be used with the `before` parameter."
-    last: ConnectionLimitInt,
+    last: ConnectionLimitInt
 
     "Return only results that come after the Nth result. This parameter may be used with the `first` parameter."
-    offset: Int,
+    offset: Int
 
     "Return results sorted in this order"
     sortOrder: SortOrder = asc
   ): VendorConnection
+
+  citiesForFilter: [String]
 }
 
 extend type Mutation {

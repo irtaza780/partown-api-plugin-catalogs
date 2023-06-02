@@ -1,5 +1,5 @@
 {
-  "name": "@partown/api-plugin-catalogs",
+  "name": "@partown/partown-api-plugin-catalogs",
   "description": "Catalogs plugin for the Reaction API",
   "version": "2.0.0-development",
   "main": "index.js",

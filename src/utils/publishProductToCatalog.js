@@ -23,7 +23,10 @@ export default async function publishProductToCatalog(product, context) {
   // console.log("here is the catalog product", catalogProduct)
   // Check to see if product has variants
   // If not, do not publish the product to the Catalog
-  if (!catalogProduct.variants || (catalogProduct.variants && catalogProduct.variants.length === 0)) {
+  if (
+    !catalogProduct.variants ||
+    (catalogProduct.variants && catalogProduct.variants.length === 0)
+  ) {
     Logger.info("Cannot publish to catalog: product has no visible variants");
     return false;
   }
@@ -36,13 +39,14 @@ export default async function publishProductToCatalog(product, context) {
       propertyType: catalogProduct.propertyType ?? null,
       propertyUnits: catalogProduct.area.value ?? 20.02,
       propertyPrice: catalogProduct.area.price ?? 20.01,
+
       location: catalogProduct.location ?? null,
-      propertySaleType: catalogProduct.propertySaleType ?? null
+      propertySaleType: catalogProduct.propertySaleType ?? null,
     },
     $setOnInsert: {
       _id: Random.id(),
-      createdAt: new Date()
-    }
+      createdAt: new Date(),
+    },
   };
 
   CatalogSchema.validate(modifier, { modifier: true });
@@ -50,7 +54,7 @@ export default async function publishProductToCatalog(product, context) {
   // Insert/update catalog document
   const result = await Catalog.updateOne(
     {
-      "product.productId": catalogProduct.productId
+      "product.productId": catalogProduct.productId,
     },
     modifier,
     { upsert: true }
@@ -66,12 +70,22 @@ export default async function publishProductToCatalog(product, context) {
       currentProductHash: productHash,
       publishedAt: now,
       publishedProductHash: productHash,
-      updatedAt: now
+      updatedAt: now,
     };
 
-    const productUpdateResult = await Products.updateOne({ _id: product._id }, { $set: productUpdates });
-    if (!productUpdateResult || !productUpdateResult.result || productUpdateResult.result.ok !== 1) {
-      Logger.error(`Failed to update product hashes for product with ID ${product._id}`, productUpdateResult && productUpdateResult.result);
+    const productUpdateResult = await Products.updateOne(
+      { _id: product._id },
+      { $set: productUpdates }
+    );
+    if (
+      !productUpdateResult ||
+      !productUpdateResult.result ||
+      productUpdateResult.result.ok !== 1
+    ) {
+      Logger.error(
+        `Failed to update product hashes for product with ID ${product._id}`,
+        productUpdateResult && productUpdateResult.result
+      );
     }
 
     const updatedProduct = { ...product, ...productUpdates };
@@ -80,14 +94,17 @@ export default async function publishProductToCatalog(product, context) {
     // things this triggers are done, and we can publish the next one.
     await appEvents.emit("afterPublishProductToCatalog", {
       catalogProduct,
-      product: updatedProduct
+      product: updatedProduct,
     });
 
-    Logger.debug({
-      name: "cart",
-      ms: Date.now() - startTime,
-      productId: catalogProduct.productId
-    }, "publishProductToCatalog finished");
+    Logger.debug(
+      {
+        name: "cart",
+        ms: Date.now() - startTime,
+        productId: catalogProduct.productId,
+      },
+      "publishProductToCatalog finished"
+    );
   }
 
   return wasUpdateSuccessful;

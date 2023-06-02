@@ -10,7 +10,9 @@ import publishProductToCatalogById from "./publishProductToCatalogById.js";
  */
 export default async function publishProductsToCatalog(productIds, context) {
   // console.log("here are product ids", productIds)
-  const promises = productIds.map((product) => publishProductToCatalogById(product, context));
+  const promises = productIds.map((product) =>
+    publishProductToCatalogById(product, context)
+  );
   const results = await Promise.all(promises);
   return results.every((result) => result);
 }
