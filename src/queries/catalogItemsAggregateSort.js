@@ -26,9 +26,12 @@ export default async function catalogItemsAggregate(
     throw new ReactionError("invalid-param", "You must provide a tagId");
 
   const selector = {
-    "product.tagIds": tagId,
     "product.isDeleted": { $ne: true },
     "product.isVisible": true,
+    productId: productId,
+    tradeType: "offer",
+    completionStatus: { $ne: "completed" },
+    isCancelled: { $ne: true },
     ...catalogBooleanFilters,
   };
 
@@ -44,7 +47,7 @@ export default async function catalogItemsAggregate(
 
   return arrayJoinPlusRemainingQuery({
     arrayFieldPath: "featuredProductIds",
-    collection: Tags,
+    collection: Trades,
     connectionArgs,
     joinCollection: Catalog,
     joinFieldPath: "product.productId",
@@ -52,6 +55,7 @@ export default async function catalogItemsAggregate(
     joinSortOrder: "asc",
     positionFieldName: "position",
     selector: { _id: tagId },
+
     sortByForRemainingDocs: "createdAt",
     sortOrderForRemainingDocs: "asc",
   });

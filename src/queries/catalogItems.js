@@ -15,7 +15,14 @@ import ReactionError from "@reactioncommerce/reaction-error";
  */
 export default async function catalogItems(
   context,
-  { searchQuery, shopIds, tagIds, catalogBooleanFilters, propertyFilters } = {}
+  {
+    searchQuery,
+    shopIds,
+    tagIds,
+    catalogBooleanFilters,
+    propertyFilters,
+    sortByAvailableQuantity,
+  } = {}
 ) {
   const { collections } = context;
   const { Catalog } = collections;
@@ -33,31 +40,84 @@ export default async function catalogItems(
     "product.isVisible": true,
   };
   if (propertyFilters) {
-    console.log("if statement");
     const { state, propertyType, propertySaleType } = propertyFilters;
     if (state?.length) query["location.state"] = { $in: state };
     if (propertyType) query["propertyType"] = propertyType;
     if (propertySaleType) query["propertySaleType.type"] = propertySaleType;
     else query["propertySaleType.type"] = { $ne: "sold" };
   } else if (!propertyFilters?.propertySaleType) {
-    console.log("else statement");
     query["propertySaleType.type"] = { $ne: "sold" };
   }
+
+  if (sortByAvailableQuantity) {
+  }
+
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
 
-  if (searchQuery) {
-    // query.$text = {
-    //   $search: searchQuery
-    // };
-    query["product.title"] = {
-      $regex: searchQuery,
-      $options: "i",
-    };
-    // query.$text = {$regex: "^" + searchQuery + ".*$"}
-  }
-  console.log("here are property filters", propertyFilters, query);
+  // if (searchQuery) {
+  //   // query.$text = {
+  //   //   $search: searchQuery
+  //   // };
+  //   // query["product.title"] = {
+  //   //   $regex: searchQuery,
+  //   //   $options: "i",
+  //   // };
+
+  //   // query.$text = {$regex: "^" + searchQuery + ".*$"}
+  // }
+  // console.log("here are property filters", propertyFilters, query);
   // console.log(await Catalog.find({$text: {$regex: "^" + searchQuery + ".*$"}}).toArray()
   // )
+
+  if (searchQuery) {
+    query.$or = [
+      {
+        "product.title": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.slug": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.country": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.state": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.location": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.propertyType": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.state": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.location": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+      {
+        "product.location.country": {
+          $regex: new RegExp(searchQuery, "i"),
+        },
+      },
+    ];
+  }
   return Catalog.find(query);
 }

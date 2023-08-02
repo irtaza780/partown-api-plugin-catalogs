@@ -438,6 +438,9 @@ enum CatalogItemSortByField {
 
   "Sort by date and time at which the item was last updated"
   updatedAt
+
+  "Sort by remaining available units available on the marketplace"
+  remainingQuantity
 }
 
 type Vendor {
@@ -492,6 +495,9 @@ extend type Query {
     shopIds: [ID]!
 
     propertyFilters: propertyFiltersInput
+
+    "return results sorted based on the available quantity of the property"
+    sortByAvailableQuantity: SortOrder = desc
 
     "Optionally provide a list of tag IDs to further filter the item list"
     tagIds: [ID]

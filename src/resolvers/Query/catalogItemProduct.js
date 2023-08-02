@@ -1,4 +1,7 @@
-import { decodeCatalogItemOpaqueId, decodeShopOpaqueId } from "../../xforms/id.js";
+import {
+  decodeCatalogItemOpaqueId,
+  decodeShopOpaqueId,
+} from "../../xforms/id.js";
 
 /**
  * @name Query.catalogItemProduct
@@ -24,6 +27,6 @@ export default async function catalogItemProduct(_, args, context) {
 
   return context.queries.catalogItemProduct(context, {
     catalogIdOrProductSlug,
-    shopId
+    shopId,
   });
 }
