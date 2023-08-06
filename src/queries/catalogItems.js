@@ -102,21 +102,6 @@ export default async function catalogItems(
           $regex: new RegExp(searchQuery, "i"),
         },
       },
-      {
-        "product.location.state": {
-          $regex: new RegExp(searchQuery, "i"),
-        },
-      },
-      {
-        "product.location.location": {
-          $regex: new RegExp(searchQuery, "i"),
-        },
-      },
-      {
-        "product.location.country": {
-          $regex: new RegExp(searchQuery, "i"),
-        },
-      },
     ];
   }
   return Catalog.find(query);
